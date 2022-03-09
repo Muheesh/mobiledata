@@ -1,4 +1,5 @@
 import sqlite3
+from prettytable import PrettyTable
 data = sqlite3.connect("mobile.db")
 table = data.execute("select name from sqlite_master where type='table' and name='smartphones'").fetchall()
 if table!=[]:
@@ -30,8 +31,8 @@ while True:
         getMyear = input("Enter the manufacturing year:")
         getMmonth = input("Enter the manufactured month:")
         getPrice = input("Enter the price of the mobile:")
-        data.execute("update smartphones set name='"+getMname+"',brand='"+getMbrand+"',sno="+getSno+",\
-         myear='"+getMmonth+"',mmonth='"+getMmonth+"',price="+getPrice+"")
+        data.execute("insert into smartphones (name,brand,sno,myear,mmonth,price) values('"+getMname+"','"+getMbrand+"',\
+        "+getSno+",'"+getMmonth+"','"+getMmonth+"',"+getPrice+")")
         data.commit()
         print("Added mobile phone successfully")
 
@@ -50,14 +51,10 @@ while True:
     elif a==3:
         data = sqlite3.connect("mobile.db")
         result = data.execute("select * from smartphones")
+        table = PrettyTable(["Mobile name","Mobile brand","Mobile S.no","Manu.year","Manu.month","Price"])
         for i in result:
-            print("Mobile name", i[0])
-            print("Mobile Brand", i[1])
-            print("Mobile serial number", i[2])
-            print("Manufactured year", i[3])
-            print("Manufactured month", i[4])
-            print("Price of the mobile", i[5])
-
+            table.add_row([i[0],i[1],i[2],i[3],i[4],i[5]])
+        print(table)
     elif a==4:
         getSno = input("Enter the serial number to be updated:")
         getMname = input("Enter the new mobile name:")
